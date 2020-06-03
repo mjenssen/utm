@@ -1,0 +1,8 @@
+[package]
+name = "utm"
+version = "0.1.0"
+authors = ["Martin Jenssen <martin@jenssen.org>"]
+license = "MIT/Apache-2.0"
+edition = "2018"
+
+[dependencies]
