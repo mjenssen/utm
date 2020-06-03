@@ -16,7 +16,7 @@ The universal Turing machine is expected to use rules that are written as a 5-el
 
     (current state, current value, new value, direction, new state)
 
-So given the current state and symbol, the rule will return a new value, the direction to move the position in the tape, and the new state.
+So given the current state and value, the rule will return a new value, the direction to move the position in the tape, and the new state.
 
 Direction can be one of left, right, or stay.
 
