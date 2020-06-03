@@ -6,8 +6,14 @@ pub enum Move {
     Stay,
 }
 
+/// An action to take based on the current state and value.
+///
+/// This is generalized for the state type S and value type V.
 pub struct Action<S, V>(pub V, pub Move, pub S);
 
+/// The tape represents the memory of the machine.
+///
+/// This is generalized for the value type T.
 pub struct Tape<T> {
     pos: usize,
     tape: Vec<T>,
@@ -18,6 +24,9 @@ impl<T> Tape<T>
 where
     T: Copy + PartialEq,
 {
+    /// Create a new tape. It must be given the value that represents
+    /// a blank value, as well as an initial list of values for the
+    /// tape.
     pub fn new(blank: T, tape: Vec<T>) -> Self {
         if tape.is_empty() {
             Self {
@@ -34,11 +43,13 @@ where
         }
     }
 
-    /// Returns the current value
+    /// Return the value at the current position.
     fn current(&self) -> &T {
         &self.tape[self.pos]
     }
 
+    /// Update the tape by writing the given value to the current
+    /// position and then moving the position in the direction given.
     fn update(&mut self, value: T, dir: Move) {
         self.tape[self.pos] = value;
 
@@ -63,10 +74,12 @@ where
         }
     }
 
+    /// Return the length of the tape.
     fn len(&self) -> usize {
         self.tape.len()
     }
 
+    /// Count the number of times a given value is found in the tape.
     fn count(&self, value: T) -> usize {
         let mut length = 0;
 
@@ -80,6 +93,11 @@ where
     }
 }
 
+/// The machine itself. It contains a tape, and some internal
+/// information about the number of steps taken, timing, and the
+/// current state.
+///
+/// It is generalized over the state type S and value type V.
 pub struct Machine<S, V> {
     state: S,
     stop: S,
@@ -93,6 +111,8 @@ where
     S: PartialEq,
     V: Copy + PartialEq,
 {
+    /// Create a new machine. It must be given the starting state and
+    /// the state that will halt the machine.
     pub fn new(start: S, stop: S, tape: Tape<V>) -> Self {
         Self {
             state: start,
@@ -103,6 +123,10 @@ where
         }
     }
 
+    /// Run the machine using the rules given. `rules` is a function
+    /// that is given the current state and value and must return an
+    /// `Action` defining a new value, a direction to take on the
+    /// tape, and the new state.
     pub fn run(&mut self, rules: fn(&S, &V) -> Action<S, V>) {
         let start_time = Instant::now();
 
@@ -124,6 +148,8 @@ where
         self.elapsed = start_time.elapsed();
     }
 
+    /// Helper function to show a simple report on how many steps it
+    /// took and how long the machine run for.
     pub fn show_report(&self, count_values: Option<V>)
     where
         V: std::fmt::Display,
