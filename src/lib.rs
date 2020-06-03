@@ -13,21 +13,21 @@ pub struct Action<S, V>(pub V, pub Move, pub S);
 
 /// The tape represents the memory of the machine.
 ///
-/// This is generalized for the value type T.
-pub struct Tape<T> {
+/// This is generalized for the value type V.
+pub struct Tape<V> {
     pos: usize,
-    tape: Vec<T>,
-    blank: T,
+    tape: Vec<V>,
+    blank: V,
 }
 
-impl<T> Tape<T>
+impl<V> Tape<V>
 where
-    T: Copy + PartialEq,
+    V: Copy + PartialEq,
 {
     /// Create a new tape. It must be given the value that represents
     /// a blank value, as well as an initial list of values for the
     /// tape.
-    pub fn new(blank: T, tape: Vec<T>) -> Self {
+    pub fn new(blank: V, tape: Vec<V>) -> Self {
         Self {
             pos: 0,
             tape: if tape.is_empty() { vec![blank] } else { tape },
@@ -36,13 +36,13 @@ where
     }
 
     /// Return the value at the current position.
-    fn current(&self) -> &T {
+    fn current(&self) -> &V {
         &self.tape[self.pos]
     }
 
     /// Update the tape by writing the given value to the current
     /// position and then moving the position in the direction given.
-    fn update(&mut self, value: T, dir: Move) {
+    fn update(&mut self, value: V, dir: Move) {
         self.tape[self.pos] = value;
 
         match dir {
@@ -72,7 +72,7 @@ where
     }
 
     /// Count the number of times a given value is found in the tape.
-    fn count(&self, value: T) -> usize {
+    fn count(&self, value: V) -> usize {
         let mut length = 0;
 
         for v in self.tape.iter() {
