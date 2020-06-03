@@ -28,18 +28,10 @@ where
     /// a blank value, as well as an initial list of values for the
     /// tape.
     pub fn new(blank: T, tape: Vec<T>) -> Self {
-        if tape.is_empty() {
-            Self {
-                pos: 0,
-                tape: vec![blank],
-                blank,
-            }
-        } else {
-            Self {
-                pos: 0,
-                tape,
-                blank,
-            }
+        Self {
+            pos: 0,
+            tape: if tape.is_empty() { vec![blank] } else { tape },
+            blank,
         }
     }
 
